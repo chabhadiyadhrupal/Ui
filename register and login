@@ -1,0 +1,79 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
+using JetBrains.Annotations;
+
+public class Register : MonoBehaviour {
+
+
+	public TMP_InputField usernameInput;
+	public TMP_InputField emailInput;
+	public TMP_InputField passwordInput;
+	
+	public TMP_InputField addressInput;
+	public TMP_InputField landmarkInput;
+	public TMP_InputField username;
+	public TMP_InputField password;
+	public GameObject Logincanvas;
+	public Users UserDetail;  // Reference to the UserScript
+	public LoginPage login;
+	private List<Users> userList = new List<Users> ();
+	public void Start () {
+
+	}
+	
+
+
+	public void RegisterUser () {
+		string username = usernameInput.text;
+		string email = emailInput.text;
+		string password = passwordInput.text;
+		//string country = countryInput.text;
+		string address = addressInput.text;
+		string landmark = landmarkInput.text;
+
+		
+		Users newuser = new Users {
+			Username = username,
+			Password = password,
+			Email = email,
+			Address = address,
+			Landmark = landmark
+		};
+		userList.Add (newuser);
+		
+		Debug.Log ("User registered successly!");
+
+	}
+
+	public void Login () {
+		foreach (Users user in userList) {
+			if (user.Username==username.text&& user.Password== password.text) {
+				Debug.Log ("Successfully Login");
+
+				
+				Logincanvas.SetActive (false);
+
+			} else if (username.text == usernameInput.text && password.text != passwordInput.text) {
+
+				Debug.Log (" wrong password");
+			} else if (username.text != usernameInput.text && password.text !=passwordInput.text||username.text!="") {
+
+				Debug.Log (" wrong Name");
+			}
+			else if(username.text==""||password.text=="") {
+				Debug.Log ("plese fill the blancks");
+			}
+			username.text = "";
+			password.text = "";
+			usernameInput.text = "";
+			emailInput.text = "";
+			addressInput.text = "";
+			passwordInput.text = "";
+			landmarkInput.text = "";
+		}
+	}
+}
+	
