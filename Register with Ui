@@ -1,0 +1,111 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
+using JetBrains.Annotations;
+
+public class Register : MonoBehaviour {
+
+
+	public TMP_InputField usernameInput;
+	public TMP_InputField emailInput;
+	public TMP_InputField passwordInput;
+	public TMP_InputField addressInput;
+	public TMP_InputField landmarkInput;
+	public TMP_InputField username;
+	public TMP_InputField password;
+	public GameObject Logincanvas;
+	public GameObject PassCanvas;
+	public GameObject NameCanvas;
+	public GameObject FillCanvas;
+	public GameObject SucessLoginCanvas;
+	public Users UserDetail;  // Reference to the UserScript
+	
+	private List<Users> userList = new List<Users> ();
+	public void Start () {
+
+	}
+	
+
+
+	public void RegisterUser () {
+		string username = usernameInput.text;
+		string email = emailInput.text;
+		string password = passwordInput.text;
+		string address = addressInput.text;
+		string landmark = landmarkInput.text;
+
+		
+		Users newuser = new Users {
+			Username = username,
+			Password = password,
+			Email = email,
+			Address = address,
+			Landmark = landmark
+		};
+		userList.Add (newuser);
+		
+		Debug.Log ("User registered successly!");
+
+	}
+
+	public void  Login () {
+		foreach (Users user in userList) {
+			if (user.Username==username.text&& user.Password== password.text) {
+				Debug.Log ("Successfully Login");
+				
+				username.text = "";
+				password.text = "";
+				SucessLoginCanvas.SetActive (true);
+				Invoke ("DisableSucess", 2f);
+				
+
+			}  if (username.text == "" || password.text == "") {
+				Debug.Log ("Fill The Required Fields");
+				FillCanvas.SetActive (true);
+				Invoke ("DisableFillCanvas", 1f);
+			}  if (username.text == usernameInput.text && password.text != passwordInput.text) {
+
+				Debug.Log (" Incorrect Password");
+				PassCanvas.SetActive (true);
+				Invoke ("DisableObject", 1f);
+				
+			}  if (username.text != usernameInput.text && password.text ==passwordInput.text) {
+
+				Debug.Log (" User Name Does Not Exists");
+				NameCanvas.SetActive (true);
+				Invoke ("DisableName", 1f);
+
+			} else if (username.text != usernameInput.text && password.text != passwordInput.text) {
+				Debug.Log ("All Wrong Ans.");
+				//allWrong.SetActive (true);
+				//Invoke ("DisableAll", 1f);
+			}
+		}
+		usernameInput.text = "";
+		emailInput.text = "";
+		addressInput.text = "";
+		passwordInput.text = "";
+		landmarkInput.text = "";
+	}
+	//private void DisableAll() {
+	//	allWrong.SetActive (false);
+
+	//}
+	private void DisableSucess () {
+		SucessLoginCanvas.SetActive (false);
+		Logincanvas.SetActive (false);
+	}
+	private void DisableFillCanvas() {
+		FillCanvas.SetActive (false);
+	}
+	
+	private void DisableObject () {
+		PassCanvas.SetActive (false);
+	}
+
+	private void DisableName() {
+		NameCanvas.SetActive (false);
+	}
+}
