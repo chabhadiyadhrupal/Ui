@@ -1,0 +1,29 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class Users : MonoBehaviour
+{
+    public string Username { get; set; }
+    public string Email { get; set; }
+    public string Password { get;  set; }
+    //public string Country { get; private set; }
+    public string Address { get;  set; }
+    public string Landmark { get; set; }
+	public void Start () {
+       
+	}
+	private void Update () {
+		
+	}
+	public void SetUserDetails (string username, string email,string password,/*string country,*/string address,string landmark) {
+        Username = username;
+        Email = email;
+        Password = password;
+        //Country = country;
+        Address = address;
+        Landmark = landmark;
+    }
+}
+
