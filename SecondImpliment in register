@@ -1,0 +1,224 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
+using JetBrains.Annotations;
+
+public class Register : MonoBehaviour {
+
+
+	public TMP_InputField usernameInput;
+	public TMP_InputField emailInput;
+	public TMP_InputField passwordInput;
+	public TMP_InputField addressInput;
+	public TMP_InputField landmarkInput;
+	public TMP_InputField username;
+	public TMP_InputField password;
+	public GameObject Logincanvas;
+	public GameObject PassCanvas;
+	public GameObject NameCanvas;
+	public GameObject FillCanvas;
+	public GameObject SucessLoginCanvas;
+	public GameObject NotExits;
+	public GameObject Blank;
+	public GameObject register;
+	public GameObject FillRegister;
+	public GameObject EmailNotAvailable;
+	//public Users UserDetail;
+	public int MinPassword = 6;
+	public int MaxPassword = 8;
+	public GameObject passwordSixtoEight;
+	public GameObject NameNotAvailable;
+	public Button button;
+
+	public GameObject SignUp;// Reference to the UserScript
+
+	private List<Users> userList = new List<Users> ();
+	public void Start () {
+		passwordInput.onEndEdit.AddListener (ValidetePassword);
+	}
+
+	public void RegisterUser () {
+
+		string username = usernameInput.text;
+		string email = emailInput.text;
+		string password = passwordInput.text;
+		string address = addressInput.text;
+		string landmark = landmarkInput.text;
+
+		if (IsUsernameUnique (username)) {
+			if (IsEmailUnique (email)) {
+				Users newuser = new Users {
+					Username = username,
+					Password = password,
+					Email = email,
+					Address = address,
+					Landmark = landmark
+				};
+				userList.Add (newuser);
+
+				Debug.Log ("User registered successly!");
+
+
+				if (usernameInput.text == "" || passwordInput.text == "" || emailInput.text == "" || addressInput.text == "" || landmarkInput.text == "") {
+					Debug.Log ("Plese Fill Empty Field");
+					register.SetActive (true);
+					Logincanvas.SetActive (false);
+					FillRegister.SetActive (true);
+					Invoke ("DeactivateFill", 1f);
+				}
+			} else {
+				Debug.Log ("Email Already Exists. Choose a Different One");
+				register.SetActive (true);
+				Logincanvas.SetActive (false);
+				EmailNotAvailable.SetActive (true);
+				Invoke ("DeactivateEmailAvailable",1f);
+			}
+
+		}
+		else {
+			Debug.Log ("Username already exists. Choose a different one.");
+			register.SetActive (true);
+			Logincanvas.SetActive (false);
+			NameNotAvailable.SetActive (true);
+			Invoke ("DeactivateNameAvailable", 1f);
+
+		}
+
+	}
+	
+	private bool IsUsernameUnique(string name) {
+		return !userList.Exists (Users => Users.Username == name);
+	}
+	private bool IsEmailUnique(string email) {
+		return !userList.Exists (Users => Users.Email == email);
+	}
+
+	public void Login () {
+		if (username.text != "") {
+			Debug.Log ("User not Exists, Creat one");
+			SignUp.SetActive (true);
+			Blank.SetActive (false);
+			NotExits.SetActive (true);
+
+
+
+		}
+		else{
+			NotExits.SetActive (false);
+			Debug.Log ("plese Enter User Name And Password");
+			Blank.SetActive (true);
+		}
+
+		foreach (Users user in userList) {
+
+			if (user.Username == username.text && user.Password == password.text&&username.text!="") {
+				NotExits.SetActive (false);
+				Blank.SetActive (false);
+				Debug.Log ("Successfully Login");
+
+				username.text = "";
+				password.text = "";
+				SucessLoginCanvas.SetActive (true);
+
+				Invoke ("DisableSucess", 1f);
+				
+
+			}
+			
+			else {
+				if (username.text == "" || password.text == "") {
+					Debug.Log ("Fill The Required Fields");
+					//if (username.text != "") {
+					//	NotExits.SetActive (false);
+					//}
+					FillCanvas.SetActive (true);
+					
+					Invoke ("DisableFillCanvas", 1f);
+				}
+				if (user.Username == username.text && user.Password != password.text&&username.text!="") {
+					NotExits.SetActive (false);
+					Blank.SetActive (false);
+					Debug.Log (" Incorrect Password");
+					PassCanvas.SetActive (true);
+				
+					
+  					Invoke ("DisableObject", 1f);
+				}
+
+				if (user.Username != username.text&&username.text!="") {
+					NotExits.SetActive (false);
+					Blank.SetActive (false);
+					Debug.Log (" User Name Does Not Exists");
+					NameCanvas.SetActive (true);
+					Invoke ("DisableName", 1f);
+				}
+			}
+		}
+		
+			//} else if (username.text != usernameInput.text && password.text != passwordInput.text) {
+			//	Debug.Log ("All Wrong Ans.");
+			//	//allWrong.SetActive (true);
+			//	//Invoke ("DisableAll", 1f);
+			//}
+			usernameInput.text = "";
+			emailInput.text = "";
+			addressInput.text = "";
+			passwordInput.text = "";
+			landmarkInput.text = "";
+
+			//private void DisableAll() {
+			//	AllWrong.SetActive (false);
+		}
+	
+	//}
+	private void DisableSucess () {
+		Logincanvas.SetActive (false);
+		SucessLoginCanvas.SetActive (false);
+	}
+	private void DisableFillCanvas() {
+		
+		FillCanvas.SetActive (false);
+	}
+	
+	private void DisableObject () {
+		
+		PassCanvas.SetActive (false);
+	}
+
+	private void DisableName() {
+		NameCanvas.SetActive (false);
+	}
+	private void DeactivateFill() {
+		FillRegister.SetActive (false);
+
+	}
+	private void DeactivateNameAvailable() {
+		NameNotAvailable.SetActive (false);
+	}
+	private void DeactivateEmailAvailable () {
+		EmailNotAvailable.SetActive (false);
+	}
+	private void ValidetePassword(string input) {
+		if (input.Length < MinPassword || input.Length > MaxPassword) {
+			// Reset the password input or provide feedback to the user
+			Debug.Log ("Password must be between " + MinPassword + " and " + MaxPassword + " characters.");
+			//passwordInput.text = "";
+			//register.SetActive (true);
+			//Logincanvas.SetActive (false);
+			passwordSixtoEight.SetActive (true);
+			button.interactable = false;
+				//Invoke ("DeactivateSixToEight", 1f);
+		} else {
+			passwordSixtoEight.SetActive (false);
+			button.interactable = true;
+			// Password is within the acceptable range
+			Debug.Log ("Password is valid.");
+		}
+	}
+	//private void DeactivateSixToEight() {
+	//	passwordSixtoEight.SetActive (false);
+	//}
+}
+
