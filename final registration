@@ -1,0 +1,333 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
+using JetBrains.Annotations;
+
+public class Register : MonoBehaviour {
+
+	public TMP_Text Warning;
+	
+	public TMP_InputField usernameInput;
+	public TMP_InputField emailInput;
+	public TMP_InputField passwordInput;
+	public TMP_InputField addressInput;
+	public TMP_InputField landmarkInput;
+	public TMP_InputField username;
+	public TMP_InputField password;
+	public TMP_InputField Confirm;
+	public GameObject Logincanvas;
+	//public GameObject PassCanvas;
+	//public GameObject NameCanvas;
+	//public GameObject FillCanvas;
+	public GameObject SucessLoginCanvas;
+	public GameObject NotExits;
+	public GameObject Blank;
+	public GameObject register;
+	//public GameObject FillRegister;
+//	public GameObject EmailNotAvailable;
+	//public GameObject Forgetpass;
+	public GameObject ForgetCanvas;
+	//public GameObject Panel;
+	
+	//public GameObject RegisterSucess;
+	
+	public TMP_InputField ForgetUsername;
+	public TMP_InputField ForgetEmail;
+	
+	//public Users UserDetail;
+	public int MinPassword = 6;
+	public int MaxPassword = 8;
+	public GameObject Reset;
+	public GameObject NameNotAvailable;
+	public Button button;
+	public Button ResetButton;
+	public TMP_InputField NewPassword;
+
+	public GameObject SignUp;// Reference to the UserScript
+	
+	private List<Users> userList = new List<Users> ();
+	public void Start () {
+		passwordInput.onEndEdit.AddListener (ValidetePassword);
+		NewPassword.onEndEdit.AddListener (ValidPassword);
+	}
+
+	public void RegisterUser () {
+
+		string username = usernameInput.text;
+		string email = emailInput.text;
+		string password = passwordInput.text;
+		string address = addressInput.text;
+		string landmark = landmarkInput.text;
+
+		if (IsUsernameUnique (username)) {
+			if (IsEmailUnique (email)) {
+				Users newuser = new Users {
+					Username = username,
+					Password = password,
+					Email = email,
+					Address = address,
+					Landmark = landmark
+				};
+				if (usernameInput.text != "" && passwordInput.text != ""&&emailInput.text!=""&&addressInput.text!=""&&landmarkInput.text!="") {
+					userList.Add (newuser);
+					Debug.Log ("User registered successly!");
+					register.SetActive (false);
+					Warning.text = "User Registered Successly";
+					Logincanvas.SetActive (true);
+			
+					Invoke ("DisableFillCanvas", 1f);
+				}
+
+				
+
+
+				if (usernameInput.text == "" || passwordInput.text == "" || emailInput.text == "" || addressInput.text == "" || landmarkInput.text == "") {
+					Debug.Log ("Please Fill Empty Field");
+
+					Warning.text="Please Fill Empty Fields ";
+					//sFillRegister.SetActive (true);
+					Invoke ("DisableFillCanvas", 1f);
+				}
+			} else {
+				Debug.Log ("Email Already Exists. Choose a Different One");
+				register.SetActive (true);
+				Warning.text= "Email Already Exists. Choose a Different One";
+				//Logincanvas.SetActive (false);
+				//EmailNotAvailable.SetActive (true);
+				Invoke ("DisableFillCanvas", 1f);
+			}
+
+		} else {
+			Debug.Log ("Username already exists. Choose a different one.");
+			register.SetActive (true);
+			Warning.text = "Username already exists. Choose a different one.";
+			////Logincanvas.SetActive (false);
+			//NameNotAvailable.SetActive (true);
+			Invoke ("DisableFillCanvas", 1f);
+
+		}
+
+	}
+
+	private bool IsUsernameUnique (string name) {
+		return !userList.Exists (Users => Users.Username == name);
+	}
+	private bool IsEmailUnique (string email) {
+		return !userList.Exists (Users => Users.Email == email);
+	}
+
+	public void Login () {
+		if (username.text != "") {
+			Debug.Log ("User not Exists, Creat one");
+			SignUp.SetActive (true);
+			Blank.SetActive (false);
+			NotExits.SetActive (true);
+
+
+		} else {
+			NotExits.SetActive (false);
+			Debug.Log ("plese Enter User Name And Password");
+			Blank.SetActive (true);
+		}
+		foreach (Users users in userList) {
+			if (users.Username != username.text && username.text != "") {
+
+
+				NotExits.SetActive (false);
+				Blank.SetActive (false);
+				Debug.Log (" User Name Does Not Exists");
+				//NameCanvas.SetActive (true);
+				Warning.text = " User Name Does Not Exists";
+				Invoke ("DisableFillCanvas", 1f);
+			}
+		}
+			foreach (Users user in userList) {
+
+
+
+				if (username.text == "" || password.text == "") {
+					NotExits.SetActive (false);
+					Blank.SetActive (false);
+					Debug.Log ("Fill The Required Fields");
+					//if (username.text != "") {
+					//	NotExits.SetActive (false);
+					//}
+					//FillCanvas.SetActive (true);
+					Warning.text = "Fill The Required Fields";
+					Invoke ("DisableFillCanvas", 1f);
+				}
+				if (user.Username == username.text && user.Password != password.text && username.text != "" && password.text != "") {
+					NotExits.SetActive (false);
+					Blank.SetActive (false);
+					Debug.Log (" Incorrect Password");
+					//PassCanvas.SetActive (true);
+					////Forgetpass.SetActive (true);
+					Warning.text = "Incorect Password";
+					Invoke ("DisableFillCanvas", 1f);
+				}
+				if (user.Username == username.text && user.Password == password.text /*&& username.text != ""*/) {
+					NotExits.SetActive (false);
+					Blank.SetActive (false);
+					Debug.Log ("Successfully Login");
+					//Forgetpass.SetActive (false);
+					//username.text = "";
+					//password.text = "";
+					//SucessLoginCanvas.SetActive (true);
+
+					Warning.text = "Successfully Login";
+					Invoke ("DisableSuccess", 1f);
+					//if (user) {
+				}
+
+				//}
+
+
+
+
+
+				//if (user.Username == username.text && user.Password != password.text && /*username.text != ""&&*/password.text != "") {
+				//	NotExits.SetActive (false);
+				//	Blank.SetActive (false);
+				//	Debug.Log (" Incorrect Password");
+				//	//PassCanvas.SetActive (true);
+				//	////Forgetpass.SetActive (true);
+				//	Warning.text = "Incorect Password";
+				//	Invoke ("DisableFillCanvas", 1f);
+				//}
+
+
+
+			}
+
+
+
+			usernameInput.text = "";
+			emailInput.text = "";
+			addressInput.text = "";
+			passwordInput.text = "";
+			landmarkInput.text = "";
+
+
+		}
+	
+	//}
+	private void DisableSuccess () {
+		//Logincanvas.SetActive (true);
+		Warning.text = "";
+		//username.text = "";
+		//password.text = "";
+		SucessLoginCanvas.SetActive (true);
+		
+
+	}
+
+
+
+	private void ValidetePassword (string input) {
+		if (input.Length < MinPassword || input.Length > MaxPassword) {
+			// Reset the password input or provide feedback to the user
+			Debug.Log ("Password must be between " + MinPassword + " and " + MaxPassword + " characters.");
+			//passwordInput.text = "";
+			//register.SetActive (true);
+			//Logincanvas.SetActive (false);
+			//passwordSixtoEight.SetActive (true);
+			Warning.text = "Password Must Be Between 6 To 8";
+			button.interactable = false;
+			//Invoke ("DeactivateSixToEight", 1f);
+		} else {
+			Warning.text = "";
+			//passwordSixtoEight.SetActive (false);
+			button.interactable = true;
+			// Password is within the acceptable range
+			Debug.Log ("Password is valid.");
+		}
+	}
+	public void ResetPassword () {
+		ForgetCanvas.SetActive (true);
+		foreach(Users UserChack in userList) {
+			  if (UserChack.Username != ForgetUsername.text && ForgetUsername.text != "") {
+				Debug.Log ("please Enter Valid Username ");
+				Warning.text = "Please Enter valid Username";
+				Invoke ("DisableFillCanvas", 1f);
+			}
+		}
+
+		foreach (Users use in userList) {
+			if (use.Username == ForgetUsername.text && use.Email == ForgetEmail.text&&NewPassword.text!="")
+				if (use.Password == NewPassword.text) {
+					Debug.Log ("please Enter new password.this is your password");
+					Warning.text = "Please Enter New Password.this Is Your old Password";
+					Invoke ("DisableFillCanvas", 1f);
+				}
+			else if(NewPassword.text!=Confirm.text) {
+					Debug.Log ("Password do not Match");
+					Warning.text = " Confirm Password Confirmation Does Not Match ";
+					Invoke ("DisableFillCanvas", 1f);
+				}
+			else {
+					use.Password = NewPassword.text;
+					Debug.Log ("Reset SuccessFully.");
+					Warning.text = "SuccessFully Reset Password";
+					//SucessLoginCanvas.SetActive (true);
+					Invoke ("DisableReset", 1f);
+					//Logincanvas.SetActive (true);
+					// NewPassword.text=Oldpassword.text;
+				
+			} else if (ForgetUsername.text == "" || ForgetEmail.text == "" || NewPassword.text == ""||Confirm.text=="") {
+				Debug.Log ("please Fill The Fields");
+				Warning.text = "Please Fill The Fields";
+				Invoke ("DisableFillCanvas", 1f);
+			} else if (use.Username == ForgetUsername.text && use.Email != ForgetEmail.text) {
+				Debug.Log ("please Enter User Email");
+				Warning.text = "Incorect Email";
+				Invoke ("DisableFillCanvas", 1f);
+			}
+			
+
+				
+			
+		}
+
+		//private void DeactivateSixToEight() {
+		//	passwordSixtoEight.SetActive (false);
+		//}
+	}
+	private void DisableFillCanvas () {
+		Warning.text = "";
+		//FillCanvas.SetActive (false);
+	}
+	private void ValidPassword (string input) {
+		if (input.Length < MinPassword || input.Length > MaxPassword) {
+			// Reset the password input or provide feedback to the user
+			Debug.Log ("Password must be between " + MinPassword + " and " + MaxPassword + " characters.");
+			//passwordInput.text = "";
+			//register.SetActive (true);
+			//Logincanvas.SetActive (false);
+			//passwordSixtoEight.SetActive (true);
+			Warning.text = "Password Must Be Between 6 To 8";
+			ResetButton.interactable = false;
+			//Invoke ("DeactivateSixToEight", 1f);
+		} else {
+			Warning.text = "";
+			//passwordSixtoEight.SetActive (false);
+		ResetButton.interactable = true;
+			// Password is within the acceptable range
+			Debug.Log ("Password is valid.");
+		}
+	}
+	private void DisableReset() {
+		Warning.text = "";
+		Logincanvas.SetActive (true);
+		//Panel.SetActive (false);
+		Reset.SetActive (false);
+	}
+
+}
+//forget password in reset password  oldpassword to new password set in login page in  unity
+//public void ResetPassword (string oldPassword, string newPassword) {
+//// Code to reset password goes here
+//// Use oldPassword and newPassword variables to update the password
+//}
+//unity in chack user name same as userlist in name to login in unity and User Name Does Not Exists
