@@ -1,0 +1,484 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.Data.SqlTypes;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class Demo : MonoBehaviour {
+    public TMP_InputField UsernameInput;
+    public TMP_InputField emailInput;
+    public TMP_InputField passwordInput;
+    public TMP_InputField addressInput;
+    public TMP_InputField landmarkInput;
+    public TMP_InputField username;
+    public TMP_InputField password;
+    public TMP_InputField Canform;
+    public TMP_Text Name;
+    public TMP_Text Email;
+    public TMP_Text Password;
+    public TMP_Text Address;
+    public TMP_Text Landmark;
+    public TMP_Text InName;
+    public TMP_Text InPass;
+    public TMP_Text NotValidName;
+    public TMP_Text OldPassword;
+    public TMP_Text CanformPassword;
+    public TMP_Text ResetSuccess;
+    public TMP_Text RegisterSuccess;
+    //public TMP_Text ForgetName;
+    public TMP_Text ForgetEmail;
+    public TMP_Text ForgetNewPass;
+   // public TMP_Text AlreadyExists;
+    //public TMP_Text ForgetCanformPass;
+
+    //public GameObject FillTrue;
+    //public GameObject FillFalse;
+    //public GameObject FillEmail;
+    //public GameObject FillEmailFalse;
+    public GameObject Blank;
+    public GameObject NotExits;
+    public GameObject RegisterCanvas;
+    public GameObject LoginCanvas;
+    public GameObject UsernotExists;
+    public GameObject LogOut;
+    public GameObject Resetpassword;
+
+
+    public int MinPassword = 6;
+    public int MaxPassword = 8;
+    public Button button;
+    public GameObject ForgetCanvas;
+    public TMP_InputField forgetname;
+    public TMP_InputField forgetEmail;
+    public TMP_InputField NewPassword;
+    public Button Reset;
+    //public Home home;
+    public List<Users> usersList = new List<Users> ();
+
+    // Start is called before the first frame update
+    void Start () {
+        passwordInput.onEndEdit.AddListener (ValidetePassword);
+        NewPassword.onEndEdit.AddListener (ValidPassword);
+
+    }
+
+    // Update is called once per frame
+    void Update () {
+
+    }
+    public void RegisterDemo () {
+        string username = UsernameInput.text;
+        string email = emailInput.text;
+        string password = passwordInput.text;
+        string address = addressInput.text;
+        string landmark = landmarkInput.text;
+        if (IsUsernameUnique (username)) {
+            if (IsEmailUnique (email)) {
+                Users newuser = new Users {
+                    Username = username,
+                    Password = password,
+                    Email = email,
+                    Address = address,
+                    Landmark = landmark
+                };
+                if (UsernameInput.text == "") {
+                    Debug.Log ("! Please Fill Out This Fields");
+                    Name.text = "! Please Fill Out This Fields";
+                    Name.color = Color.red;
+                    Invoke ("DeactivateName", 1f);
+
+
+
+                }
+                if (emailInput.text == "") {
+                    Debug.Log ("! Please Fill Out This Fields");
+                    Email.text = "! Please Fill Out This Fields";
+                    Email.color = Color.red;
+                    Invoke ("DeactivateEmail", 1f);
+
+
+                }
+                if (passwordInput.text == "") {
+                    Debug.Log ("! Please Fill Out This Fields");
+                    Password.text = "! Please Fill Out This Fields";
+                    Password.color = Color.red;
+                    Invoke ("DeactivatePassword", 1f);
+
+
+                }
+                if (addressInput.text == "") {
+                    Debug.Log ("! Please Fill Out This Fields");
+                    Address.text = "! Please Fill Out This Fields";
+                    Address.color = Color.red;
+                    Invoke ("DeactivateAddress", 1f);
+                }
+                if (landmarkInput.text == "") {
+                    Debug.Log ("! Please Fill Out This Fields");
+                    Landmark.text = "!Please Fill Out This Fields";
+                    Landmark.color = Color.red;
+                    Invoke ("DeactivateLandmark", 1f);
+                }
+                if (UsernameInput.text != "") {
+                    Debug.Log ("√  fully filled");
+                    Name.text = "√  fully filled";
+                    Name.color = Color.green;
+                    Invoke ("DeactivateName", 1f);
+                }
+                if (emailInput.text != "") {
+                    Debug.Log ("√  fully filled");
+                    Email.text = "√  fully filled";
+                    Email.color = Color.green;
+                    Invoke ("DeactivateEmail", 1f);
+                }
+                if (passwordInput.text != "") {
+                    Debug.Log ("√  fully filled");
+                    Password.text = "√  fully filled";
+                    Password.color = Color.green;
+                    Invoke ("DeactivatePassword", 1f);
+
+                }
+                if (addressInput.text != "") {
+                    Debug.Log ("√  fully filled");
+                    Address.text = "√  fully filled";
+                    Address.color = Color.green;
+                    Invoke ("DeactivateAddress", 1f);
+                }
+                if (landmarkInput.text != "") {
+                    Debug.Log ("√  fully filled");
+                    Landmark.text = "√  fully filled";
+                    Landmark.color = Color.green;
+                    Invoke ("DeactivateLandmark", 1f);
+
+                }
+                if (UsernameInput.text != "" && passwordInput.text != "" && emailInput.text != "" && addressInput.text != "" && landmarkInput.text != "") {
+
+                    Debug.Log ("User registered successly!");
+
+                    RegisterSuccess.text = "√ User Registered Successly";
+                    // home.ResetName ();
+                    Name.text = "";
+                    Password.text = "";
+                    Email.text = "";
+                    Address.text = "";
+                    Landmark.text = "";
+
+                    RegisterCanvas.SetActive (false);
+                    LoginCanvas.SetActive (true);
+                    usersList.Add (newuser);
+                    Invoke ("DisableRegisterCanvas", 1f);
+                }
+
+
+
+
+            } else {
+                Debug.Log ("Email Already Exists. Choose a Different One");
+                Email.text ="! Email already Exists. Choose a Different One";
+                Email.color = Color.red;
+                //register.SetActive (true);
+                //Warning.text = "Email Already Exists. Choose a Different One";
+                //Logincanvas.SetActive (false);
+                //EmailNotAvailable.SetActive (true);
+                Invoke ("DisableExistsCanvas", 1f);
+            }
+
+        } else {
+            Debug.Log ("Username already exists. Choose a different one.");
+            //register.SetActive (true);
+            Name.text = "! Username Already Exists. Choose a Different One";
+            Name.color = Color.red;
+            //Warning.text = "Username already exists. Choose a different one.";
+            ////Logincanvas.SetActive (false);
+            //NameNotAvailable.SetActive (true);
+            Invoke ("DisableExistsCanvas", 1f);
+
+        }
+    }
+
+    private bool IsUsernameUnique (string name) {
+        return !usersList.Exists (Users => Users.Username == name);
+    }
+    private bool IsEmailUnique (string email) {
+        return !usersList.Exists (Users => Users.Email == email);
+    }
+    private void DeactivateName () {
+        Name.text = "";
+
+    }
+    //private void DisableExistsCanvas () {
+    //    AlreadyExists.text = "";
+    //}
+    private void DisableRegisterCanvas () {
+        RegisterSuccess.text = "";
+    }
+    private void DeactivateEmail () {
+        Email.text = "";
+
+    }
+    private void DeactivatePassword () {
+        Password.text = "";                                  
+
+    }
+    private void DeactivateAddress () {
+        Address.text = "";
+
+    }
+    private void DeactivateLandmark () {
+        Landmark.text = "";
+
+    }
+    public void Login () {
+        if (username.text != "") {
+            Debug.Log ("! User Not Exits, Create One");
+            Blank.SetActive (false);
+            NotExits.SetActive (true);
+
+        } else {
+            NotExits.SetActive (false);
+            Debug.Log ("! Please Enter User Name  And Password");
+            Blank.SetActive (true);
+        }
+        foreach (Users users in usersList) {
+            if (users.Username != username.text && username.text != "") {
+                NotExits.SetActive (false);
+                Blank.SetActive (false);
+                Debug.Log ("! User Name Does Not Exists");
+                InName.text = "! user name Does Not Exists";
+                InName.color = Color.red;
+                //UsernotExists.SetActive (true);
+                Invoke ("DeactivateInName", 1f);
+
+            }
+        }
+
+        foreach (Users user in usersList) {
+            if (username.text == "") {
+                NotExits.SetActive (false);
+                Blank.SetActive (false);
+                Debug.Log ("! Please Fill Out This Fields");
+                InName.text = "! Please Fill Out This Fields";
+                InName.color = Color.red;
+                Invoke ("DeactivateInName", 1f);
+
+
+            }
+            if (password.text == "") {
+                NotExits.SetActive (false);
+                Blank.SetActive (false);
+                Debug.Log ("! Please Fill Out This Fields");
+                InPass.text = "! Please Fill Out This Fields";
+                InPass.color = Color.red;
+                Invoke ("DeactivateInPass", 1f);
+
+
+            }
+            if (username.text != "") {
+                NotExits.SetActive (false);
+                Blank.SetActive (false);
+                Debug.Log ("√  fully filled ");
+                InName.text = "√  fully filled ";
+                InName.color = Color.green;
+                Invoke ("DeactivateInName", 1f);
+
+
+            }
+            if (Password.text != "") {
+                NotExits.SetActive (false);
+                Blank.SetActive (false);
+                Debug.Log ("√  fully filled ");
+                InPass.text = "√  fully filled ";
+                InPass.color = Color.green;
+
+                Invoke ("DeactivateInpass", 1f);
+
+
+            }
+            if (user.Username == username.text && user.Password != password.text && username.text != "" && password.text != "") {
+                NotExits.SetActive (false);
+                Blank.SetActive (false);
+                Debug.Log ("Incorect Password");
+                InPass.text = "! Incorect Password";
+                //Invoke ("DeactivateInPass", 1f);
+
+            }
+            if (user.Username == username.text && user.Password == password.text) {
+                NotExits.SetActive (false);
+                Blank.SetActive (false);
+                Debug.Log ("SuccessFully Login");
+                RegisterSuccess.text = "√ SuccessFully Login";
+                RegisterSuccess.color = Color.green;
+                LoginCanvas.SetActive (false);
+                LogOut.SetActive (true);
+                Invoke ("DisableRegisterCanvas", 1f);
+            }
+        }
+      
+
+    }
+    private void DeactivateInName () {
+        InName.text = "";
+
+    }
+    private void DeactivateInPass () {
+        InPass.text = "";
+
+    }
+    private void DeactivateCanvas () {
+        UsernotExists.SetActive (false);
+    }
+    private void ValidetePassword (string input) {
+        if (input.Length < MinPassword || input.Length > MaxPassword) {
+            Debug.Log ("Password Must Be Between" + MinPassword + "And" + MaxPassword + "characters");
+            Password.text = "! Password Must Be Between 6to 8";
+            Password.color = Color.red;
+
+            button.interactable = false;
+        } else {
+            Password.text = "√ Password Is Valided";
+            Password.color = Color.green;
+            button.interactable = true;
+            Debug.Log ("Password Is Valided");
+        }
+    }
+    public void ResetPassword () {
+        ForgetCanvas.SetActive (true);
+        foreach (Users userchack in usersList) {
+			if (userchack.Username != forgetname.text && forgetname.text != "") {
+				Debug.Log ("! Please Enter Valid Username");
+				NotValidName.text = "! Please Enter Valid Userame";
+				Invoke ("DeactivateFname", 1f);
+
+			}
+           
+
+		}
+
+
+        foreach (Users use in usersList) {
+            if (use.Username == forgetname.text && use.Email == forgetEmail.text && NewPassword.text != "") 
+                if (use.Password == NewPassword.text) {
+                    Debug.Log ("! Please Enter New Password This Is Your Old Password ");
+                    OldPassword.text = "";
+                    OldPassword.text = "! Please Enter New Password This is Your Old Password ";
+                    OldPassword.color = Color.red;
+                    Invoke ("DeactivateOldPassword", 1f);
+
+                
+               
+                } else if (NewPassword.text != Canform.text) {
+                    Debug.Log ("password Do Not Match");
+                    CanformPassword.text = "! Password Do not Match";
+                    CanformPassword.color = Color.red;
+
+                    Invoke ("DisableNotMatch", 1f);
+
+                } else {
+                    use.Password = NewPassword.text;
+                    Debug.Log ("Reset SuccessFully");
+                    ResetSuccess.text = " √ Password Reset SuccessFully ";
+                    ForgetCanvas.SetActive (false);
+                    LoginCanvas.SetActive (true);
+                    Invoke ("DisableReset", 1f);
+
+                }
+           if (forgetname.text == "") {
+                    Debug.Log ("! Please Fill The Fields");
+                    NotValidName.text = "! Please fill the Fields";
+                    NotValidName.color = Color.red;
+                    Invoke ("DeactivateFname", 1f);
+
+                }  if (forgetEmail.text == "") {
+                    Debug.Log ("! Please Fill The Fields");
+                    ForgetEmail.text = "!please Fill The Fields";
+                    ForgetEmail.color = Color.red;
+                    Invoke ("DeactivateForgetEmail", 1f);
+                }  if (NewPassword.text == "") {
+                    Debug.Log ("! Please Fill The Fields");
+                    ForgetNewPass.text = "!please Fill The Fields";
+                    ForgetNewPass.color=Color.red;
+                    Invoke ("DeactivateNewPass", 1f);
+                } if (Canform.text == "") {
+                    Debug.Log ("!Please Fill the Fields");
+                    CanformPassword.text = "! please fill The Fields";
+                    CanformPassword.color = Color.red;
+                    Invoke ("DisableNotMatch", 1f);
+                } if (forgetname.text != "") {
+                    Debug.Log ("√ Fully Filled");
+                    NotValidName.text = "√ Fully Filled";
+                    NotValidName.color = Color.green;
+                    Invoke ("DeactivateFname", 1f);
+
+
+                }  if (forgetEmail.text != "") {
+                    Debug.Log ("√ Fully Filled");
+                    ForgetEmail.text = "√ Fully Filled";
+                    ForgetEmail.color = Color.green;
+                    Invoke ("DeactivateForgetEmail", 1f);
+
+                }  if  (NewPassword.text != "") {
+                    Debug.Log ("√ fully Filled");
+                    ForgetNewPass.text = "√ Fully Filled";
+                    ForgetNewPass.color = Color.green;
+                    Invoke ("DeactivateNewPass", 1f);
+
+                }  if (Canform.text != "") {
+                    Debug.Log ("√ fully Filled");
+                    CanformPassword.text = "√ fully Filled";
+                    CanformPassword.color = Color.green;
+                    Invoke ("DisableNotMatch", 1f);
+
+                } if (use.Username == forgetname.text && use.Email != forgetEmail.text) {
+                    Debug.Log ("incorrect Password ");
+                    ForgetEmail.text = "! incorrect Email";
+                    ForgetEmail.color = Color.red;
+                    // Invoke ("DeactivateForgetEmail", 1f);
+                }
+               
+            }
+        }
+
+    
+        private void ValidPassword (string Input) {
+        if (Input.Length < MinPassword || Input.Length > MaxPassword) {
+            Debug.Log ("Password Must Be Between" + MinPassword + "And" + MaxPassword + "Characters");
+            ForgetNewPass.text = "Password Must Be Between 6 to 8";
+            Reset.interactable = false;
+        } else {
+            ForgetNewPass.text = "";
+            ForgetNewPass.text = "√ validPassword";
+            ForgetNewPass.color = Color.green;
+            Reset.interactable = true;
+            Debug.Log (" Valid Password");
+            Invoke ("DeactivateForgetEmail", 1f);
+        }
+    }
+
+    private void DeactivateFname () {
+        NotValidName.text = "";
+    }
+    private void DeactivateOldPassword () {
+        OldPassword.text = "";
+
+    }
+    private void DisableNotMatch () {
+        CanformPassword.text = "";
+        
+    }
+    private void DisableReset () {
+        ResetSuccess.text = "";
+        LoginCanvas.SetActive (true);
+        ForgetCanvas.SetActive (false);
+        //Panel.SetActive (false);
+        //Resetpassword.SetActive (false);
+
+    }
+
+    private void DeactivateForgetEmail () {
+        ForgetEmail.text = "";
+
+    }
+    private void DeactivateNewPass () {
+        ForgetNewPass.text = "";
+    }
+}
