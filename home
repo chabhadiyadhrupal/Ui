@@ -1,0 +1,84 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEditor;
+using UnityEngine;
+
+using TMPro;
+
+public class Home : MonoBehaviour
+{
+    //public Register register;
+    public GameObject BlankCanvas;
+    public GameObject NotExits;
+    public TMP_Text Warning;
+    public Demo demo;
+    //public TMP_InputField username;
+    //public TMP_InputField passWord;
+    //public TMP_InputField Email;
+    
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        //register.username.text = "";
+        //register.password.text = "";
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+    public  void ResetName() {
+        //register.username.text = "";
+        //register.password.text = "";
+        //BlankCanvas.SetActive (false);
+        //NotExits.SetActive (false);
+        //register.usernameInput.text = "";
+        //register.passwordInput.text = "";
+        //register.emailInput.text = "";
+        //register.addressInput.text = "";
+        //register.landmarkInput.text = "";
+        //register.ForgetUsername.text = "";
+        //register.ForgetEmail.text = "";
+        //register.NewPassword.text = "";
+        //register.Confirm.text = "";
+        BlankCanvas.SetActive (false);
+        NotExits.SetActive (false);
+        demo.UsernameInput.text = "";
+        demo.emailInput.text = "";
+        demo.passwordInput.text = "";
+        demo.addressInput.text = "";
+        demo.landmarkInput.text = "";
+        demo.username.text = "";
+        demo.password.text = "";
+        demo.RegisterSuccess.text = "";
+        demo.forgetname.text = "";
+        demo.forgetEmail.text = "";
+        demo.NewPassword.text = "";
+        demo.Confirm.text = "";
+        demo.NotValidName.text = "";
+        demo.OldPassword.text = "";
+        demo.ForgetEmail.text = "";
+        demo.InName.text = "";
+        demo.InPass.text = "";
+        demo.Name.text = "";
+        demo.Email.text = "";
+        demo.Password.text = "";
+        demo.Address.text = "";
+        demo.Landmark.text = "";
+      
+        //demo.ForgetCanformPass.text = "";
+        demo.ForgetNewPass.text = "";
+
+
+        //  register.Panel.SetActive (false);
+
+        //Warning.text = "";
+        //passMaintain.SetActive (false);
+        //username.text = "";
+        //passWord.text = "";
+        //Email.text="";
+	}
+
+}
