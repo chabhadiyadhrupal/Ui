@@ -1,0 +1,54 @@
+using UnityEngine;
+using UnityEngine.UI;
+
+public class GunAmmoUI : MonoBehaviour
+{
+    public Image gunIcon;
+    public Text gunNameText;
+    public Text ammoText;
+
+    public int maxAmmo = 30; // Adjust as needed
+    private int currentAmmo;
+
+    void Start()
+    {
+        currentAmmo = maxAmmo;
+        UpdateAmmoUI();
+    }
+
+    // Call this method to update gun and ammo UI
+    public void UpdateUI(Sprite gunSprite, string gunName)
+    {
+        gunIcon.sprite = gunSprite;
+        gunNameText.text = gunName;
+        UpdateAmmoUI();
+    }
+
+    // Call this method to update ammo UI
+    private void UpdateAmmoUI()
+    {
+        ammoText.text = "Ammo: " + currentAmmo + " / " + maxAmmo;
+    }
+
+    // Call this method to reload ammo
+    public void ReloadAmmo()
+    {
+        currentAmmo = maxAmmo;
+        UpdateAmmoUI();
+    }
+
+    // Call this method when shooting to decrease ammo count
+    public void Shoot()
+    {
+        if (currentAmmo > 0)
+        {
+            currentAmmo--;
+            UpdateAmmoUI();
+            // Implement shooting logic here
+        }
+        else
+        {
+            // Out of ammo - implement reloading or other behavior
+        }
+    }
+}
