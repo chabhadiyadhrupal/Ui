@@ -1,0 +1,17 @@
+using UnityEngine;
+using UnityEngine.UI;
+
+public class GunAmmoUI : MonoBehaviour
+{
+    public Image gunIcon;
+    public Text gunNameText;
+    public Text ammoText;
+
+    // Call this method to update gun and ammo UI
+    public void UpdateUI(Sprite gunSprite, string gunName, int currentAmmo, int maxAmmo)
+    {
+        gunIcon.sprite = gunSprite;
+        gunNameText.text = gunName;
+        ammoText.text = "Ammo: " + currentAmmo + " / " + maxAmmo;
+    }
+}
