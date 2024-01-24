@@ -1,0 +1,45 @@
+using UnityEngine;
+using UnityEngine.UI;
+
+public class PlayerLivesUI : MonoBehaviour
+{
+    public Image[] lifeImages; // Assuming you have an array of images representing lives
+    public int totalLives = 3;
+    private int currentLives;
+
+    void Start()
+    {
+        currentLives = totalLives;
+        UpdateLivesUI();
+    }
+
+    void PlayerDies()
+    {
+        currentLives--;
+
+        if (currentLives <= 0)
+        {
+            // Game over logic or respawn logic can be placed here
+        }
+        else
+        {
+            // Player lost a life, update UI
+            UpdateLivesUI();
+        }
+    }
+
+    void UpdateLivesUI()
+    {
+        for (int i = 0; i < lifeImages.Length; i++)
+        {
+            if (i < currentLives)
+            {
+                lifeImages[i].enabled = true; // Display the image for remaining lives
+            }
+            else
+            {
+                lifeImages[i].enabled = false; // Hide the image for lost lives
+            }
+        }
+    }
+}
