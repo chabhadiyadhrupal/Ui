@@ -1,0 +1,32 @@
+using UnityEngine;
+
+public class Bullet : MonoBehaviour
+{
+    public float speed = 10f; // Adjust speed as needed
+    public float lifetime = 3f; // Adjust lifetime as needed
+    private float timer = 0f;
+
+    void Update()
+    {
+        // Calculate the new position of the bullet
+        Vector3 newPosition = transform.position + transform.forward * speed * Time.deltaTime;
+
+        // Move the bullet to the new position
+        transform.position = newPosition;
+
+        // Increment timer
+        timer += Time.deltaTime;
+
+        // Destroy the bullet after its lifetime expires
+        if (timer >= lifetime)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        // Destroy the bullet if it collides with something
+        Destroy(gameObject);
+    }
+}
