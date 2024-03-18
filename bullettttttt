@@ -1,0 +1,23 @@
+using UnityEngine;
+
+public class BulletSpawner : MonoBehaviour
+{
+    public GameObject bulletPrefab;
+    public float spawnInterval = 1f;
+    public float spawnRange = 5f; // adjust as needed
+    public int bulletCount = 10; // number of bullets to spawn
+
+    void Start()
+    {
+        InvokeRepeating("SpawnBullet", 0f, spawnInterval);
+    }
+
+    void SpawnBullet()
+    {
+        for (int i = 0; i < bulletCount; i++)
+        {
+            Vector3 spawnPosition = transform.position + new Vector3(0, 0, Random.Range(-spawnRange, spawnRange));
+            Instantiate(bulletPrefab, spawnPosition, Quaternion.identity);
+        }
+    }
+}
